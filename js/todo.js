@@ -5,12 +5,19 @@ function update() {
   $todoList.innerHTML = "";
   for (const item of TODOS) {
     const $li = document.createElement("li");
+    if (item.done) {
+      $li.classList.add("completed");
+    }
     $todoList.appendChild($li);
 
     // Toggle button
     const $toggle = document.createElement("input");
     $toggle.className = "toggle";
     $toggle.setAttribute("type", "checkbox");
+    if (item.done) {
+      $toggle.setAttribute("checked", "checked");
+    }
+    $toggle.addEventListener("change", onToggleTodo.bind(null, item.id));
     $li.appendChild($toggle);
 
     // Label
@@ -24,6 +31,13 @@ function update() {
     $li.appendChild($button);
   }
   document.querySelector(".main").style.display = "block";
+}
+
+function onToggleTodo(id) {
+  const todo = TODOS.find(todo => todo.id === id);
+  // TODOS.find(function(todo) { return todo.id === id; });
+  todo.done = !todo.done;
+  update();
 }
 
 function onNewTodo(e) {
